@@ -1,2 +1,1 @@
-# aws-cloudwatch-proxy-wasm
-aws-cloudwatch-proxy-wasm
+# AWS CloudWatch Proxy-Wasm
