@@ -1,0 +1,17 @@
+version: '3'
+services:
+  envoy:
+    image: envoyproxy/envoy-dev
+    working_dir: /envoy
+    command:
+    - -c
+    - envoy.yaml
+    - --component-log-level
+    - wasm:debug
+    - -l
+    - warning
+    ports:
+    - "18000:18000"
+    - "8001:8001"
+    volumes:
+    - .:/envoy
