@@ -48,5 +48,5 @@ func (ctx *pluginContext) OnQueueReady(queueID uint32) {
 		return
 	}
 
-	proxywasm.LogErrorf("dequeued data: %s", data)
+	proxywasm.LogDebugf("dequeued data: %s", data)
 }
