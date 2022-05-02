@@ -4,6 +4,7 @@ import (
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm/types"
 
+	"github.com/hatappi/aws-cloudwatch-proxy-wasm/config"
 	"github.com/hatappi/aws-cloudwatch-proxy-wasm/constant"
 )
 
@@ -22,11 +23,31 @@ func (*vmContext) NewPluginContext(contextID uint32) types.PluginContext {
 
 type pluginContext struct {
 	types.DefaultPluginContext
+
+	config *config.SenderConfig
+}
+
+// OnPluginStart is called when the host environment starts the plugin
+func (ctx *pluginContext) OnPluginStart(pluginConfigurationSize int) types.OnPluginStartStatus {
+	configData, err := proxywasm.GetPluginConfiguration()
+	if err != nil && err != types.ErrorStatusNotFound {
+		proxywasm.LogCriticalf("failed to get plugin config: %v", err)
+		return types.OnPluginStartStatusFailed
+	}
+
+	config, err := config.LoadSenderConfig(configData)
+	if err != nil {
+		proxywasm.LogCriticalf("failed to load config: %v", err)
+		return types.OnPluginStartStatusFailed
+	}
+	ctx.config = config
+
+	return types.OnPluginStartStatusOK
 }
 
 // NewHttpContext initializes senderHTTPContext
 func (ctx *pluginContext) NewHttpContext(contextID uint32) types.HttpContext {
-	queueID, err := proxywasm.ResolveSharedQueue("receiver", constant.QueueName)
+	queueID, err := proxywasm.ResolveSharedQueue(ctx.config.ReceiverVMID, constant.QueueName)
 	if err != nil {
 		proxywasm.LogCriticalf("failed to resolve queue %s: %v", constant.QueueName, err)
 	}

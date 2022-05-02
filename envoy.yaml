@@ -50,6 +50,12 @@ static_resources:
                     code:
                       local:
                         filename: "./sender.wasm"
+                  configuration:
+                    "@type": type.googleapis.com/google.protobuf.StringValue
+                    value: |
+                      {
+                        "receiver_vm_id": "receiver"
+                      }
           - name: envoy.filters.http.router
 admin:
   access_log_path: "/dev/null"
