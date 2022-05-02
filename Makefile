@@ -7,3 +7,9 @@ build-sender:
 
 build-receiver:
 	tinygo build -o receiver.wasm -scheduler=none -target=wasi ./cmd/receiver/main.go
+
+gen:
+	go generate ./...
+
+test:
+	go test -tags=proxytest ./... -v
