@@ -1,11 +1,13 @@
 package main
 
 import (
+	easyjson "github.com/mailru/easyjson"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm/types"
 
 	"github.com/hatappi/aws-cloudwatch-proxy-wasm/config"
 	"github.com/hatappi/aws-cloudwatch-proxy-wasm/constant"
+	"github.com/hatappi/aws-cloudwatch-proxy-wasm/queue"
 )
 
 func main() {
@@ -91,9 +93,26 @@ func (ctx *senderHTTPContext) OnHttpStreamDone() {
 		return
 	}
 
-	proxywasm.LogDebugf("authority: %s, method: %s, path: %s, status: %s", authority, method, path, status)
+	message := queue.Message{
+		Host:   authority,
+		Method: method,
+		Path:   path,
+		Status: status,
+	}
 
-	if err := proxywasm.EnqueueSharedQueue(ctx.queueID, []byte("test")); err != nil {
+	mb, err := easyjson.Marshal(message)
+	if err != nil {
+		proxywasm.LogErrorf("failed to Marshal queue.Message: %v", err)
+		return
+	}
+
+	cmb, err := proxywasm.CallForeignFunction("compress", mb)
+	if err != nil {
+		proxywasm.LogErrorf("failed to call compress function: %v", err)
+		return
+	}
+
+	if err := proxywasm.EnqueueSharedQueue(ctx.queueID, cmb); err != nil {
 		proxywasm.LogCriticalf("failed to queue: %v", err)
 	}
 }

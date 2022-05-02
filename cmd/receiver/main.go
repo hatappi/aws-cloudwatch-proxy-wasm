@@ -1,10 +1,12 @@
 package main
 
 import (
+	easyjson "github.com/mailru/easyjson"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm/types"
 
 	"github.com/hatappi/aws-cloudwatch-proxy-wasm/constant"
+	"github.com/hatappi/aws-cloudwatch-proxy-wasm/queue"
 )
 
 func main() {
@@ -48,5 +50,18 @@ func (ctx *pluginContext) OnQueueReady(queueID uint32) {
 		return
 	}
 
-	proxywasm.LogDebugf("dequeued data: %s", data)
+	ud, err := proxywasm.CallForeignFunction("uncompress", data)
+	if err != nil {
+		proxywasm.LogErrorf("failed to call uncompress function: %v", err)
+		return
+	}
+
+	var message queue.Message
+	err = easyjson.Unmarshal(ud, &message)
+	if err != nil {
+		proxywasm.LogErrorf("failed to Unmarshal message: %v", err)
+		return
+	}
+
+	proxywasm.LogDebugf("dequeued data from queue %d: %+v", queueID, message)
 }
