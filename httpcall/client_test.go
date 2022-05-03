@@ -35,7 +35,10 @@ type testHttpContext struct {
 func (ctx *testHttpContext) OnHttpRequestHeaders(numHeaders int, endOfStream bool) types.Action {
 	client := New(1000)
 
-	err := client.Post("test_cluster", "/foo", [][2]string{{"x-foo", "bar"}}, nil, func(headers http.Header, body []byte, err error) {
+	header := make(http.Header)
+	header.Set("x-foo", "bar")
+
+	err := client.Post("test_cluster", "/foo", header, nil, func(headers http.Header, body []byte, err error) {
 		if err != nil {
 			proxywasm.LogErrorf("failed to request: %v", err)
 			proxywasm.ResumeHttpRequest()
@@ -78,8 +81,7 @@ func TestPost(t *testing.T) {
 		{
 			Upstream: "test_cluster",
 			Headers: [][2]string{
-				{":authority", "test_cluster"}, {":method", "POST"}, {":path", "/foo"},
-				{"x-foo", "bar"},
+				{"X-Foo", "bar"}, {":authority", "test_cluster"}, {":method", "POST"}, {":path", "/foo"},
 			},
 			Trailers: [][2]string{},
 			Body:     []byte{},
