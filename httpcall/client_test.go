@@ -81,7 +81,10 @@ func TestPost(t *testing.T) {
 		{
 			Upstream: "test_cluster",
 			Headers: [][2]string{
-				{"X-Foo", "bar"}, {":authority", "test_cluster"}, {":method", "POST"}, {":path", "/foo"},
+				{"X-Foo", "bar"},
+				{":authority", "test_cluster"},
+				{":method", "POST"},
+				{":path", "/foo"},
 			},
 			Trailers: [][2]string{},
 			Body:     []byte{},
@@ -94,8 +97,10 @@ func TestPost(t *testing.T) {
 	// Call OnHttpCallResponse
 	body := []byte("OK")
 	headers := [][2]string{
-		{"HTTP/1.1", "200 OK"}, {"Date:", "Thu, 3 May 2022 00:00:00 GMT"},
-		{"Content-Type", "application/json"}, {"Content-Length", "2"},
+		{"HTTP/1.1", "200 OK"},
+		{"Date:", "Thu, 3 May 2022 00:00:00 GMT"},
+		{"Content-Type", "application/json"},
+		{"Content-Length", "2"},
 	}
 	host.CallOnHttpCallResponse(actualAttrs[0].CalloutID, headers, nil, body)
 
