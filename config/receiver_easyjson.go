@@ -46,6 +46,10 @@ func easyjsonA86519d3DecodeGithubComHatappiAwsCloudwatchProxyWasmConfig(in *jlex
 			out.AWSSecretAccessKey = string(in.String())
 		case "http_request_timeout_millisecond":
 			out.HTTPRequestTimeoutMillisecond = uint32(in.Uint32())
+		case "metric_namespace":
+			out.MetricNamespace = string(in.String())
+		case "metric_name":
+			out.MetricName = string(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -84,6 +88,16 @@ func easyjsonA86519d3EncodeGithubComHatappiAwsCloudwatchProxyWasmConfig(out *jwr
 		const prefix string = ",\"http_request_timeout_millisecond\":"
 		out.RawString(prefix)
 		out.Uint32(uint32(in.HTTPRequestTimeoutMillisecond))
+	}
+	{
+		const prefix string = ",\"metric_namespace\":"
+		out.RawString(prefix)
+		out.String(string(in.MetricNamespace))
+	}
+	{
+		const prefix string = ",\"metric_name\":"
+		out.RawString(prefix)
+		out.String(string(in.MetricName))
 	}
 	out.RawByte('}')
 }

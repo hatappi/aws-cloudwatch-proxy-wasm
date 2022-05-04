@@ -3,12 +3,16 @@
 package config
 
 import (
+	"os"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 )
 
 func TestLoadReceiverConfig(t *testing.T) {
+	os.Unsetenv("AWS_ACCESS_KEY_ID")
+	os.Unsetenv("AWS_SECRET_ACCESS_KEY")
+
 	testCases := map[string]struct {
 		inputData []byte
 
@@ -22,7 +26,9 @@ func TestLoadReceiverConfig(t *testing.T) {
 					"cloud_watch_cluster_name": "cloudwatch_cluster",
 					"aws_access_key_id": "foo",
 					"aws_secret_access_key": "bar",
-					"http_request_timeout_millisecond": 100
+					"http_request_timeout_millisecond": 100,
+					"metric_namespace": "foo",
+					"metric_name": "bar"
 				}
 			`),
 			expectedConfig: &ReceiverConfig{
@@ -31,6 +37,8 @@ func TestLoadReceiverConfig(t *testing.T) {
 				AWSAccessKeyID:                "foo",
 				AWSSecretAccessKey:            "bar",
 				HTTPRequestTimeoutMillisecond: 100,
+				MetricNamespace:               "foo",
+				MetricName:                    "bar",
 			},
 			wantErr: false,
 		},
