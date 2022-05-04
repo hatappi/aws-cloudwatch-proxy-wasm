@@ -39,7 +39,7 @@ func (ctx *testHttpContext) OnHttpRequestHeaders(numHeaders int, endOfStream boo
 	header := make(http.Header)
 	header.Set("x-foo", "bar")
 
-	err := client.Post("test_cluster", "/foo", header, nil, func(headers http.Header, body []byte, err error) {
+	err := client.Post("test_cluster", "example.com", "/foo", header, nil, func(headers http.Header, body []byte, err error) {
 		if err != nil {
 			proxywasm.LogErrorf("failed to request: %v", err)
 			proxywasm.ResumeHttpRequest()
@@ -83,7 +83,7 @@ func TestPost(t *testing.T) {
 			Upstream: "test_cluster",
 			Headers: [][2]string{
 				{"X-Foo", "bar"},
-				{":authority", "test_cluster"},
+				{":authority", "example.com"},
 				{":method", "POST"},
 				{":path", "/foo"},
 				{"Accept", "application/json"},
