@@ -28,7 +28,7 @@ func LoadReceiverConfig(data []byte) (*ReceiverConfig, error) {
 
 	if data != nil {
 		if err := easyjson.Unmarshal(data, config); err != nil {
-			return nil, fmt.Errorf("failed to unmarshal sender config: %s", err)
+			return nil, fmt.Errorf("failed to unmarshal receiver config: %s", err)
 		}
 	}
 
