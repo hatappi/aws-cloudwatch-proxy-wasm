@@ -1,3 +1,5 @@
+//go:build proxytest
+
 package service
 
 import (
