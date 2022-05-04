@@ -32,6 +32,7 @@ func (c *client) Post(host, path string, header http.Header, body []byte, callba
 	header.Set(":authority", host)
 	header.Set(":method", "POST")
 	header.Set(":path", path)
+	header.Set("Accept", "application/json")
 
 	if err := c.do(host, header, body, callback); err != nil {
 		return fmt.Errorf("failed to make a request: %s", err)

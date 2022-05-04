@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm/proxytest"
 	"github.com/tetratelabs/proxy-wasm-go-sdk/proxywasm/types"
@@ -85,12 +86,18 @@ func TestPost(t *testing.T) {
 				{":authority", "test_cluster"},
 				{":method", "POST"},
 				{":path", "/foo"},
+				{"Accept", "application/json"},
 			},
 			Trailers: [][2]string{},
 			Body:     []byte{},
 		},
 	}
-	if diff := cmp.Diff(actualAttrs, expectedAttrs); diff != "" {
+	opts := []cmp.Option{
+		cmpopts.SortSlices(func(i, j [2]string) bool {
+			return i[0] < j[0]
+		}),
+	}
+	if diff := cmp.Diff(actualAttrs, expectedAttrs, opts...); diff != "" {
 		t.Errorf("attributes of DispatchHttpCall mismatch (-got, +want)\n%s", diff)
 	}
 
