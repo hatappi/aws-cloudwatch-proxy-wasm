@@ -10,6 +10,17 @@ bootstrap_extensions:
         code:
           local:
             filename: "./receiver.wasm"
+        environment_variables:
+          host_env_keys:
+            - AWS_ACCESS_KEY_ID
+            - AWS_SECRET_ACCESS_KEY
+      configuration:
+        "@type": type.googleapis.com/google.protobuf.StringValue
+        value: |
+          {
+            "cloud_watch_region": "ap-northeast-1",
+            "cloud_watch_cluster_name": "cloudwatch_api"
+          }
 static_resources:
   listeners:
   - name: main
@@ -57,6 +68,26 @@ static_resources:
                         "receiver_vm_id": "receiver"
                       }
           - name: envoy.filters.http.router
+  clusters:
+    - name: cloudwatch_api
+      connect_timeout: 5000s
+      type: LOGICAL_DNS
+      dns_lookup_family: V4_ONLY
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: cloudwatch_api
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: monitoring.ap-northeast-1.amazonaws.com
+                      port_value: 443
+      transport_socket:
+        name: envoy.transport_sockets.tls
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.UpstreamTlsContext
+          sni: monitoring.ap-northeast-1.amazonaws.com
 admin:
   access_log_path: "/dev/null"
   address:
