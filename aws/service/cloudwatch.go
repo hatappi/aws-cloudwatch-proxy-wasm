@@ -55,13 +55,13 @@ func (cw *CloudWatch) PutMetricData(input *types.PutMetricDataInput) error {
 		return fmt.Errorf("failed to set SignatureV4 header: %s", err)
 	}
 
-	err = cw.httpClient.Post(cw.apiClusterName, cloudWatchAPIHost, "/", header, body, func(header http.Header, respBody []byte, err error) {
+	err = cw.httpClient.Post(cw.apiClusterName, cloudWatchAPIHost, "/", header, body, func(respHeader http.Header, respBody []byte, err error) {
 		if err != nil {
 			proxywasm.LogErrorf("failed to request to PutMetricData: %v", err)
 			return
 		}
 
-		if s := header.Get("status"); s != "200" {
+		if s := respHeader.Get("status"); s != "200" {
 			proxywasm.LogErrorf("failed to request to PutMetricData: status: %s, body: %s", s, respBody)
 			return
 		}
