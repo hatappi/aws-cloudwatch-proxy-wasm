@@ -49,13 +49,15 @@ func TestSetSignatureV4Header(t *testing.T) {
 		tc := tc
 
 		t.Run(name, func(t *testing.T) {
-			err := signer.SetSignatureV4Header(tc.header, tc.config)
-			if (err != nil) != tc.wantErr {
+			header := tc.header
+
+			err := signer.SetSignatureV4Header(header, tc.config)
+			if tc.wantErr != (err != nil) {
 				t.Errorf("err: %v", err)
 			}
 
-			if tc.expectedHeaderCnt != len(tc.header) {
-				t.Errorf("header count is different. expected: %d, actual: %d", tc.expectedHeaderCnt, len(tc.header))
+			if tc.expectedHeaderCnt != len(header) {
+				t.Errorf("header count is different. expected: %d, actual: %d", tc.expectedHeaderCnt, len(header))
 			}
 		})
 	}
