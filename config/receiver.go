@@ -16,6 +16,8 @@ type ReceiverConfig struct {
 	AWSAccessKeyID                string `json:"aws_access_key_id"`
 	AWSSecretAccessKey            string `json:"aws_secret_access_key"`
 	HTTPRequestTimeoutMillisecond uint32 `json:"http_request_timeout_millisecond"`
+	MetricNamespace               string `json:"metric_namespace"`
+	MetricName                    string `json:"metric_name"`
 }
 
 // LoadReceiverConfig parses data argument and returns ReceiverConfig
@@ -24,6 +26,8 @@ func LoadReceiverConfig(data []byte) (*ReceiverConfig, error) {
 		AWSAccessKeyID:                os.Getenv("AWS_ACCESS_KEY_ID"),
 		AWSSecretAccessKey:            os.Getenv("AWS_SECRET_ACCESS_KEY"),
 		HTTPRequestTimeoutMillisecond: 5000,
+		MetricNamespace:               "AWSCloudWatchProxyWasm",
+		MetricName:                    "RequestCount",
 	}
 
 	if data != nil {
