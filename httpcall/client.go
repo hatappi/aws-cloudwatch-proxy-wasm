@@ -13,7 +13,7 @@ type Callback func(headers http.Header, body []byte, err error)
 
 // Client represents client for httpcall
 type Client interface {
-	Post(host, path string, header http.Header, body []byte, callback Callback) error
+	Post(cluster_name, host, path string, header http.Header, body []byte, callback Callback) error
 }
 
 // New initializes client that meets Client interface
@@ -28,13 +28,13 @@ type client struct {
 }
 
 // Post makes a POST request
-func (c *client) Post(host, path string, header http.Header, body []byte, callback Callback) error {
+func (c *client) Post(cluster_name, host, path string, header http.Header, body []byte, callback Callback) error {
 	header.Set(":authority", host)
 	header.Set(":method", "POST")
 	header.Set(":path", path)
 	header.Set("Accept", "application/json")
 
-	if err := c.do(host, header, body, callback); err != nil {
+	if err := c.do(cluster_name, header, body, callback); err != nil {
 		return fmt.Errorf("failed to make a request: %s", err)
 	}
 
