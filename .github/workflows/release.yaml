@@ -7,7 +7,7 @@ on:
 
 jobs:
   build_and_push:
-    name: Build and Push Sender OCI image
+    name: Build and Push volume image
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
