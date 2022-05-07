@@ -16,5 +16,5 @@ services:
     volumes:
     - .:/envoy
     environment:
-      - AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY
+      - ACPW_AWS_ACCESS_KEY_ID
+      - ACPW_AWS_SECRET_ACCESS_KEY

@@ -23,8 +23,8 @@ type ReceiverConfig struct {
 // LoadReceiverConfig parses data argument and returns ReceiverConfig
 func LoadReceiverConfig(data []byte) (*ReceiverConfig, error) {
 	config := &ReceiverConfig{
-		AWSAccessKeyID:                os.Getenv("AWS_ACCESS_KEY_ID"),
-		AWSSecretAccessKey:            os.Getenv("AWS_SECRET_ACCESS_KEY"),
+		AWSAccessKeyID:                os.Getenv("ACPW_AWS_ACCESS_KEY_ID"),
+		AWSSecretAccessKey:            os.Getenv("ACPW_AWS_SECRET_ACCESS_KEY"),
 		HTTPRequestTimeoutMillisecond: 5000,
 		MetricNamespace:               "AWSCloudWatchProxyWasm",
 		MetricName:                    "RequestCount",

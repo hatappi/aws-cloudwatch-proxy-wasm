@@ -12,8 +12,8 @@ bootstrap_extensions:
             filename: "./receiver.wasm"
         environment_variables:
           host_env_keys:
-            - AWS_ACCESS_KEY_ID
-            - AWS_SECRET_ACCESS_KEY
+            - ACPW_AWS_ACCESS_KEY_ID
+            - ACPW_AWS_SECRET_ACCESS_KEY
       configuration:
         "@type": type.googleapis.com/google.protobuf.StringValue
         value: |

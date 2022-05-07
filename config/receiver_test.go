@@ -10,8 +10,8 @@ import (
 )
 
 func TestLoadReceiverConfig(t *testing.T) {
-	os.Unsetenv("AWS_ACCESS_KEY_ID")
-	os.Unsetenv("AWS_SECRET_ACCESS_KEY")
+	os.Unsetenv("ACPW_AWS_ACCESS_KEY_ID")
+	os.Unsetenv("ACPW_AWS_SECRET_ACCESS_KEY")
 
 	testCases := map[string]struct {
 		inputData []byte
