@@ -1,0 +1,12 @@
+FROM tinygo/tinygo:0.23.0 AS builder
+
+RUN apt-get install make -y
+
+COPY . .
+
+RUN make build-receiver
+
+FROM scratch
+
+COPY --from=builder ./receiver.wasm ./plugin.wasm
+
