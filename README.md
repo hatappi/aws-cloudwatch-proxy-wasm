@@ -62,15 +62,6 @@ $ aws cloudwatch list-metrics --namespace AWSCloudWatchProxyWasm-dev
 | `receiver_vm_id` | ✔ | VM ID of receiver |
 | `match_hosts` | | Hosts for sending metrics. e.g. example.com |
 
-example
-
-```
-{
-  "receiver_vm_id": "receiver",
-  "match_hosts": ["example.com"]
-}
-```
-
 ### Receiver
 
 |Name|Required|Description|
