@@ -10,7 +10,8 @@ import (
 //easyjson:json
 // SenderConfig represents config for sender
 type SenderConfig struct {
-	ReceiverVMID string `json:"receiver_vm_id"`
+	ReceiverVMID string     `json:"receiver_vm_id"`
+	MatchHosts   MatchHosts `json:"match_hosts"`
 }
 
 // LoadSenderConfig parses data argument and returns SenderConfig
@@ -29,4 +30,17 @@ func LoadSenderConfig(data []byte) (*SenderConfig, error) {
 	}
 
 	return config, nil
+}
+
+type MatchHosts []string
+
+// Contain checks if host includes or not
+func (mh MatchHosts) Contain(host string) bool {
+	for _, h := range mh {
+		if h == host {
+			return true
+		}
+	}
+
+	return false
 }

@@ -19,7 +19,8 @@ bootstrap_extensions:
         value: |
           {
             "cloud_watch_region": "ap-northeast-1",
-            "cloud_watch_cluster_name": "cloudwatch_api"
+            "cloud_watch_cluster_name": "cloudwatch_api",
+            "metric_namespace": "AWSCloudWatchProxyWasm-dev"
           }
 static_resources:
   listeners:
@@ -65,7 +66,8 @@ static_resources:
                     "@type": type.googleapis.com/google.protobuf.StringValue
                     value: |
                       {
-                        "receiver_vm_id": "receiver"
+                        "receiver_vm_id": "receiver",
+                        "match_hosts": ["example.com"]
                       }
           - name: envoy.filters.http.router
   clusters:

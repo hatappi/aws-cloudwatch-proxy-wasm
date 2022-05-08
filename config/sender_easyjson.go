@@ -38,6 +38,29 @@ func easyjson1d751f33DecodeGithubComHatappiAwsCloudwatchProxyWasmConfig(in *jlex
 		switch key {
 		case "receiver_vm_id":
 			out.ReceiverVMID = string(in.String())
+		case "match_hosts":
+			if in.IsNull() {
+				in.Skip()
+				out.MatchHosts = nil
+			} else {
+				in.Delim('[')
+				if out.MatchHosts == nil {
+					if !in.IsDelim(']') {
+						out.MatchHosts = make(MatchHosts, 0, 4)
+					} else {
+						out.MatchHosts = MatchHosts{}
+					}
+				} else {
+					out.MatchHosts = (out.MatchHosts)[:0]
+				}
+				for !in.IsDelim(']') {
+					var v1 string
+					v1 = string(in.String())
+					out.MatchHosts = append(out.MatchHosts, v1)
+					in.WantComma()
+				}
+				in.Delim(']')
+			}
 		default:
 			in.SkipRecursive()
 		}
@@ -56,6 +79,22 @@ func easyjson1d751f33EncodeGithubComHatappiAwsCloudwatchProxyWasmConfig(out *jwr
 		const prefix string = ",\"receiver_vm_id\":"
 		out.RawString(prefix[1:])
 		out.String(string(in.ReceiverVMID))
+	}
+	{
+		const prefix string = ",\"match_hosts\":"
+		out.RawString(prefix)
+		if in.MatchHosts == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+			out.RawString("null")
+		} else {
+			out.RawByte('[')
+			for v2, v3 := range in.MatchHosts {
+				if v2 > 0 {
+					out.RawByte(',')
+				}
+				out.String(string(v3))
+			}
+			out.RawByte(']')
+		}
 	}
 	out.RawByte('}')
 }

@@ -53,3 +53,37 @@ func TestLoadSenderConfig(t *testing.T) {
 		})
 	}
 }
+
+func TestMatchHosts_Contain(t *testing.T) {
+	testCases := map[string]struct {
+		matchHosts MatchHosts
+		host       string
+		expected   bool
+	}{
+		"contain": {
+			matchHosts: []string{"example.com"},
+			host:       "example.com",
+			expected:   true,
+		},
+		"not contain": {
+			matchHosts: []string{"example.com"},
+			host:       "test.example.com",
+			expected:   false,
+		},
+		"matchHosts is nil": {
+			matchHosts: nil,
+			host:       "test.example.com",
+			expected:   false,
+		},
+	}
+
+	for name, tc := range testCases {
+		tc := tc
+		t.Run(name, func(t *testing.T) {
+			matched := tc.matchHosts.Contain(tc.host)
+			if matched != tc.expected {
+				t.Errorf("got: %v, expected: %v", matched, tc.expected)
+			}
+		})
+	}
+}

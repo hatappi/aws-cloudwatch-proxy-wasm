@@ -55,16 +55,18 @@ func (ctx *pluginContext) NewHttpContext(contextID uint32) types.HttpContext {
 	}
 
 	return &senderHTTPContext{
-		contextID: contextID,
-		queueID:   queueID,
+		contextID:  contextID,
+		queueID:    queueID,
+		matchHosts: ctx.config.MatchHosts,
 	}
 }
 
 type senderHTTPContext struct {
 	types.DefaultHttpContext
 
-	contextID uint32
-	queueID   uint32
+	contextID  uint32
+	queueID    uint32
+	matchHosts config.MatchHosts
 }
 
 // OnHttpStreamDone is called when the host environment is done processing
@@ -72,6 +74,11 @@ func (ctx *senderHTTPContext) OnHttpStreamDone() {
 	authority, err := proxywasm.GetHttpRequestHeader(":authority")
 	if err != nil {
 		proxywasm.LogErrorf("failed to get authority header: %v", err)
+		return
+	}
+
+	if len(ctx.matchHosts) > 0 && !ctx.matchHosts.Contain(authority) {
+		proxywasm.LogDebugf("Host: %s is not included in matchHosts", authority)
 		return
 	}
 
